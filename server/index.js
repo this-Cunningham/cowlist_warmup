@@ -9,9 +9,19 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
+app.get('/cows', (req, res) => {
   Cow.find()
     .then((data) => res.status(200).send(data))
+    .catch(err => res.status(400).send({ err }))
+});
+
+app.post('/api/cow', (req, res) => {
+  const { body } = req;
+  console.log(body)
+
+  const newCow = new Cow(body);
+  newCow.save()
+    .then(( data ) => res.status(201).send(data))
     .catch(err => res.status(400).send({ err }))
 });
 
